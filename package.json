@@ -15,5 +15,10 @@
   "bugs": {
     "url": "https://github.com/ihimanshubhutani/drawWidMe/issues"
   },
-  "homepage": "https://github.com/ihimanshubhutani/drawWidMe#readme"
+  "homepage": "https://github.com/ihimanshubhutani/drawWidMe#readme",
+  "dependencies": {
+    "ejs": "^3.1.2",
+    "express": "^4.17.1",
+    "socket.io": "^2.3.0"
+  }
 }
