@@ -147,8 +147,6 @@
 
 					console.log('user', data.username, username);
 					ctx2.beginPath();
-					ctx2.moveTo(data.canvasX, data.canvasY);
-
 
 				});
 
@@ -159,6 +157,7 @@
 					}
 					console.log('inside der');
 					console.log(data.username, data.username);
+
 					ctx2.lineTo(data.canvasX, data.canvasY);
 					ctx2.stroke();
 
@@ -192,7 +191,7 @@
 							canvasY = e.pageY - myCanvas.offsetTop;
 							console.log('down', canvasX, canvasY, e.pageX, e.pageY);
 
-							socket.emit('start draw', { room, username, canvasX, canvasY });
+							socket.emit('start drawing', { room, username, canvasX, canvasY });
 
 							ctx.moveTo(canvasX, canvasY);
 						})

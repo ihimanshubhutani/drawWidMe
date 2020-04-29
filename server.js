@@ -65,6 +65,7 @@ io.sockets.on('connection', function (socket) {
 
 
   socket.on('start drawing', (data) => {
+    console.log('start drawing')
     io.sockets.to(data.room).emit('st', data);
   });
 
