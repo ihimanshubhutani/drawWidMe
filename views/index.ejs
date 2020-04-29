@@ -18,6 +18,13 @@
 
     </head>
     <body style="overscroll-behavior: none;">
+      <button id="goFS">Go fullscreen</button>
+<script>
+  var goFS = document.getElementById("goFS");
+  goFS.addEventListener("click", function() {
+      document.body.requestFullscreen();
+  }, false);
+</script>
 
     <div class="bs-example">
 
