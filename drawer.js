@@ -29,7 +29,7 @@ function draw(e) {
   ctx.beginPath();
 
   ctx.lineWidth = 20;
-  ctx.lineCap = "round";
+  ctx.lineCap = "square";
   ctx.strokeStyle = color;
 
   ctx.moveTo(pos.x, pos.y);
@@ -37,4 +37,5 @@ function draw(e) {
   ctx.lineTo(pos.x, pos.y);
 
   ctx.stroke();
+
 }
