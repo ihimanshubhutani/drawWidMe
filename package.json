@@ -1,0 +1,19 @@
+{
+  "name": "drawwidme",
+  "version": "1.0.0",
+  "description": "Let You draw on whiteboard",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ihimanshubhutani/drawWidMe.git"
+  },
+  "author": "Himanshu Bhutani",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ihimanshubhutani/drawWidMe/issues"
+  },
+  "homepage": "https://github.com/ihimanshubhutani/drawWidMe#readme"
+}
