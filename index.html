@@ -16,28 +16,17 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
     </head>
 
-    <style>
-        .bs-example{
-            margin: 20px;
-        }
-    </style>
     </head>
     <body>
 
     <div class="bs-example">
 
-        <form>
-            <input id="hex" placeholder="enter color"></input>
-
-            <div class="custom-control custom-radio custom-control-inline">
-                <input type="radio" class="custom-control-input" name="customRadio" style="background-color: black;" id="customRadio1">
-                <label class="custom-control-label" for="customRadio1">Yellow</label>
-            </div>
-            <div class="custom-control custom-radio custom-control-inline">
-                <input type="radio" class="custom-control-input" name="customRadio" id="customRadio2" checked>
-                <label class="custom-control-label" for="customRadio2">Black</label>
-            </div>
-        </form>
+        <button type="button" onclick="changeColor('yellow')" class="btn btn-warning" style="border-radius: 30px; height: 10px; width: 10px;"  data-toggle="button" aria-pressed="false" autocomplete="off">
+          </button>
+          <button type="button" onclick="changeColor('black')" class="btn btn-dark" style="border-radius: 30px; height: 10px; width: 10px;"  data-toggle="button" aria-pressed="false" autocomplete="off">
+        </button>
+        <button type="button" onclick="changeColor('pink')" class="btn" style="border-radius: 30px; height: 10px; width: 10px; background-color: pink;"  data-toggle="button" aria-pressed="false" autocomplete="off">
+        </button>
 
     <canvas id="draw"></canvas>
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>

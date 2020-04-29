@@ -1,4 +1,5 @@
 var canvas = document.getElementById("draw");
+var color = '';
 
 var ctx = canvas.getContext("2d");
 resize();
@@ -21,11 +22,14 @@ function setPosition(e) {
   pos.y = e.clientY;
 }
 
+function changeColor(value){
+    color= value;
+}
+
 function draw(e) {
   if (e.buttons !== 1) return;
 
-  var color = document.getElementById("hex").value;
-
+  console.log(color);
   ctx.beginPath();
 
   ctx.lineWidth = 20;
