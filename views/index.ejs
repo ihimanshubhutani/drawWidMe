@@ -1,158 +1,192 @@
 <html lang="en">
 
-    <head>
+<head>
 
-        <link rel="stylesheet" href="style.css">
-<style>
-  html, body {margin: 0; height: 100%; overflow: hidden}
-        </style>
-        <meta charset="utf-8">
-        <title>
-            drawWidMe
-        </title>
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-
-
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-
-    </head>
-
-    <body style="overscroll-behavior: none;">
-
-<script>
-  var toggleScreen=function() {
-    var doc = window.document;
-  var docEl = doc.documentElement;
-
-  var requestFullScreen = docEl.requestFullscreen || docEl.mozRequestFullScreen || docEl.webkitRequestFullScreen || docEl.msRequestFullscreen;
-  var cancelFullScreen = doc.exitFullscreen || doc.mozCancelFullScreen || doc.webkitExitFullscreen || doc.msExitFullscreen;
-
-  if(!doc.fullscreenElement && !doc.mozFullScreenElement && !doc.webkitFullscreenElement && !doc.msFullscreenElement) {
-    requestFullScreen.call(docEl);
-  }
-  else {
-    cancelFullScreen.call(doc);
-  }
-
-  };
-</script>
-
-    <div class="bs-example">
-
-        <button type="button" onclick="changeColor('yellow')" class="btn btn-warning" style="border-radius: 30px; height: 10px; width: 10px;"  data-toggle="button" aria-pressed="false" autocomplete="off">
-          </button>
-          <button type="button" onclick="changeColor('black')" class="btn btn-dark" style="border-radius: 30px; height: 10px; width: 10px;"  data-toggle="button" aria-pressed="false" autocomplete="off">
-        </button>
-        <button type="button" onclick="changeColor('pink')" class="btn" style="border-radius: 30px; height: 10px; width: 10px; background-color: pink;"  data-toggle="button" aria-pressed="false" autocomplete="off">
-        </button>
-        <button type="button" onclick="toggleScreen()" class="btn btn-warning" style="border-radius: 30px; height: 10px; width: 10px; "  data-toggle="button" aria-pressed="false" value="" autocomplete="off">
-        </button>
-
-    <canvas id="myCanvas" style="width: 100%; height: 100%;"></canvas>
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-
-    <script >
-      var color='';
-      function changeColor(value){
-        color=value;
-      }
-
-window.onload = function() {
-	var myCanvas = document.getElementById("myCanvas");
-	var ctx = myCanvas.getContext("2d");
-
-  function resize() {
-  ctx.canvas.width = window.innerWidth;
-  ctx.canvas.height = window.innerHeight;
-}
-
-// add event listeners to specify when functions should be triggered
-window.addEventListener("resize", resize);
-
-
-    // Fill Window Width and Height
-  myCanvas.width = window.innerWidth;
-	myCanvas.height = window.innerHeight;
-
-	// Set Background Color
-    ctx.fillStyle="#fff";
-    ctx.fillRect(0,0,myCanvas.width,myCanvas.height);
-
-    // Mouse Event Handlers
-	if(myCanvas){
-		var isDown = false;
-		var canvasX, canvasY;
-		ctx.lineWidth = 5;
-
-		$(myCanvas)
-		.mousedown(function(e){
-			isDown = true;
-			ctx.beginPath();
-			canvasX = e.pageX - myCanvas.offsetLeft;
-			canvasY = e.pageY - myCanvas.offsetTop;
-			ctx.moveTo(canvasX, canvasY);
-		})
-		.mousemove(function(e){
-
-			if(isDown !== false) {
-				canvasX = e.pageX - myCanvas.offsetLeft;
-				canvasY = e.pageY - myCanvas.offsetTop;
-				ctx.lineTo(canvasX, canvasY);
-				ctx.strokeStyle = color;
-				ctx.stroke();
-			}
-		})
-		.mouseup(function(e){
-			isDown = false;
-			ctx.closePath();
-		});
-	}
-
-	// Touch Events Handlers
-	draw = {
-		started: false,
-		start: function(evt) {
-
-			ctx.beginPath();
-			ctx.moveTo(
-				evt.touches[0].pageX,
-				evt.touches[0].pageY
-			);
-
-			this.started = true;
-
-		},
-		move: function(evt) {
-
-			if (this.started) {
-				ctx.lineTo(
-					evt.touches[0].pageX,
-					evt.touches[0].pageY
-				);
-
-				ctx.strokeStyle = color;
-				ctx.lineWidth = 5;
-				ctx.stroke();
-			}
-
-		},
-		end: function(evt) {
-			this.started = false;
+	<link rel="stylesheet" href="style.css">
+	<style>
+		html,
+		body {
+			margin: 0;
+			height: 100%;
+			overflow: hidden
 		}
-	};
+	</style>
+	<meta charset="utf-8">
+	<title>
+		drawWidMe
+	</title>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+		integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 
-	// Touch Events
-	myCanvas.addEventListener('touchstart', draw.start, false);
-	myCanvas.addEventListener('touchend', draw.end, false);
-	myCanvas.addEventListener('touchmove', draw.move, false);
 
-	// Disable Page Move
-	document.body.addEventListener('touchmove',function(evt){
-		evt.preventDefault();
-	},false);
-};
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+</head>
+
+<body style="overscroll-behavior: none;">
+
+	<script>
+		var toggleScreen = function () {
+			var doc = window.document;
+			var docEl = doc.documentElement;
+
+			var requestFullScreen = docEl.requestFullscreen || docEl.mozRequestFullScreen || docEl.webkitRequestFullScreen || docEl.msRequestFullscreen;
+			var cancelFullScreen = doc.exitFullscreen || doc.mozCancelFullScreen || doc.webkitExitFullscreen || doc.msExitFullscreen;
+
+			if (!doc.fullscreenElement && !doc.mozFullScreenElement && !doc.webkitFullscreenElement && !doc.msFullscreenElement) {
+				requestFullScreen.call(docEl);
+			}
+			else {
+				cancelFullScreen.call(doc);
+			}
+
+		};
 	</script>
 
-    </html>
+	<div class="bs-example">
+
+		<button type="button" onclick="changeColor('yellow')" class="btn btn-warning"
+			style="border-radius: 30px; height: 10px; width: 10px;" data-toggle="button" aria-pressed="false"
+			autocomplete="off">
+		</button>
+		<button type="button" onclick="changeColor('black')" class="btn btn-dark"
+			style="border-radius: 30px; height: 10px; width: 10px;" data-toggle="button" aria-pressed="false"
+			autocomplete="off">
+		</button>
+		<button type="button" onclick="changeColor('pink')" class="btn"
+			style="border-radius: 30px; height: 10px; width: 10px; background-color: pink;" data-toggle="button"
+			aria-pressed="false" autocomplete="off">
+		</button>
+		<button type="button" onclick="toggleScreen()" class="btn btn-warning"
+			style="border-radius: 30px; height: 10px; width: 10px; " data-toggle="button" aria-pressed="false" value=""
+			autocomplete="off">
+		</button>
+
+		<canvas id="myCanvas" style="width: 100%; height: 100%;"></canvas>
+		<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+			integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+			crossorigin="anonymous"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+			integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+			crossorigin="anonymous"></script>
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+			integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+			crossorigin="anonymous"></script>
+
+		<script>
+			var color = '';
+			function changeColor(value) {
+				color = value;
+			}
+
+			window.onload = function () {
+				var myCanvas = document.getElementById("myCanvas");
+				var ctx = myCanvas.getContext("2d");
+
+				function resize() {
+					w = window.innerWidth;
+					h = window.innerHeight;
+					var temp_cnvs = document.createElement('canvas');
+					var temp_cntx = temp_cnvs.getContext('2d');
+
+					// set it to the new width & height and draw the current canvas data into it //
+					temp_cnvs.width = w;
+					temp_cnvs.height = h;
+					temp_cntx.fillStyle = 'white';  // the original canvas's background color
+					temp_cntx.fillRect(0, 0, w, h);
+					temp_cntx.drawImage(myCanvas, 0, 0);
+					// resize & clear the original canvas and copy back in the cached pixel data //
+					myCanvas.width = w;
+					myCanvas.height = h;
+					ctx.drawImage(temp_cnvs, 0, 0);
+
+				}
+
+				// add event listeners to specify when functions should be triggered
+				window.addEventListener("resize", resize);
+
+
+				// Fill Window Width and Height
+				myCanvas.width = window.innerWidth;
+				myCanvas.height = window.innerHeight;
+
+				// Set Background Color
+				ctx.fillStyle = "#fff";
+				ctx.fillRect(0, 0, myCanvas.width, myCanvas.height);
+
+				// Mouse Event Handlers
+				if (myCanvas) {
+					var isDown = false;
+					var canvasX, canvasY;
+					ctx.lineWidth = 5;
+
+					$(myCanvas)
+						.mousedown(function (e) {
+							isDown = true;
+							ctx.beginPath();
+							canvasX = e.pageX - myCanvas.offsetLeft;
+							canvasY = e.pageY - myCanvas.offsetTop;
+							ctx.moveTo(canvasX, canvasY);
+						})
+						.mousemove(function (e) {
+
+							if (isDown !== false) {
+								canvasX = e.pageX - myCanvas.offsetLeft;
+								canvasY = e.pageY - myCanvas.offsetTop;
+								ctx.lineTo(canvasX, canvasY);
+								ctx.strokeStyle = color;
+								ctx.stroke();
+							}
+						})
+						.mouseup(function (e) {
+							isDown = false;
+							ctx.closePath();
+						});
+				}
+
+				// Touch Events Handlers
+				draw = {
+					started: false,
+					start: function (evt) {
+
+						ctx.beginPath();
+						ctx.moveTo(
+							evt.touches[0].pageX,
+							evt.touches[0].pageY
+						);
+
+						this.started = true;
+
+					},
+					move: function (evt) {
+
+						if (this.started) {
+							ctx.lineTo(
+								evt.touches[0].pageX,
+								evt.touches[0].pageY
+							);
+
+							ctx.strokeStyle = color;
+							ctx.lineWidth = 5;
+							ctx.stroke();
+						}
+
+					},
+					end: function (evt) {
+						this.started = false;
+					}
+				};
+
+				// Touch Events
+				myCanvas.addEventListener('touchstart', draw.start, false);
+				myCanvas.addEventListener('touchend', draw.end, false);
+				myCanvas.addEventListener('touchmove', draw.move, false);
+
+				// Disable Page Move
+				document.body.addEventListener('touchmove', function (evt) {
+					evt.preventDefault();
+				}, false);
+			};
+		</script>
+
+</html>
