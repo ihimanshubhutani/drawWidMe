@@ -28,61 +28,101 @@
         <button type="button" onclick="changeColor('pink')" class="btn" style="border-radius: 30px; height: 10px; width: 10px; background-color: pink;"  data-toggle="button" aria-pressed="false" autocomplete="off">
         </button>
 
-    <canvas id="draw"></canvas>
+    <canvas id="myCanvas" style="width: 100%; height: 100%;"></canvas>
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 
     <script >
-var canvas = document.getElementById("draw");
-var color = '';
+      var color='';
+      function changeColor(value){
+        color=value;
+      }
+window.onload = function() {
+	var myCanvas = document.getElementById("myCanvas");
+	var ctx = myCanvas.getContext("2d");
 
-var ctx = canvas.getContext("2d");
-resize();
+    // Fill Window Width and Height
+  myCanvas.width = window.innerWidth;
+	myCanvas.height = window.innerHeight;
 
-function resize() {
-  ctx.canvas.width = window.innerWidth;
-  ctx.canvas.height = window.innerHeight;
-}
+	// Set Background Color
+    ctx.fillStyle="#fff";
+    ctx.fillRect(0,0,myCanvas.width,myCanvas.height);
 
-window.addEventListener("resize", resize);
-document.addEventListener("mousemove", draw);
-document.addEventListener("mousedown", setPosition);
-document.addEventListener("mouseenter", setPosition);
+    // Mouse Event Handlers
+	if(myCanvas){
+		var isDown = false;
+		var canvasX, canvasY;
+		ctx.lineWidth = 5;
 
+		$(myCanvas)
+		.mousedown(function(e){
+			isDown = true;
+			ctx.beginPath();
+			canvasX = e.pageX - myCanvas.offsetLeft;
+			canvasY = e.pageY - myCanvas.offsetTop;
+			ctx.moveTo(canvasX, canvasY);
+		})
+		.mousemove(function(e){
 
-var pos = { x: 0, y: 0 };
+			if(isDown !== false) {
+				canvasX = e.pageX - myCanvas.offsetLeft;
+				canvasY = e.pageY - myCanvas.offsetTop;
+				ctx.lineTo(canvasX, canvasY);
+				ctx.strokeStyle = color;
+				ctx.stroke();
+			}
+		})
+		.mouseup(function(e){
+			isDown = false;
+			ctx.closePath();
+		});
+	}
 
-function setPosition(e) {
-  pos.x = e.clientX;
-  pos.y = e.clientY;
-}
+	// Touch Events Handlers
+	draw = {
+		started: false,
+		start: function(evt) {
 
-function changeColor(value){
-    color= value;
-}
+			ctx.beginPath();
+			ctx.moveTo(
+				evt.touches[0].pageX,
+				evt.touches[0].pageY
+			);
 
-function draw(e) {
-  if (e.buttons !== 1) return;
+			this.started = true;
 
-  console.log(color);
-  ctx.beginPath();
+		},
+		move: function(evt) {
 
-  ctx.lineWidth = 20;
-  ctx.lineCap = "square";
-  ctx.strokeStyle = color;
+			if (this.started) {
+				ctx.lineTo(
+					evt.touches[0].pageX,
+					evt.touches[0].pageY
+				);
 
-  ctx.moveTo(pos.x, pos.y);
-  setPosition(e);
-  ctx.lineTo(pos.x, pos.y);
+				ctx.strokeStyle = "#000";
+				ctx.lineWidth = 5;
+				ctx.stroke();
+			}
 
-  ctx.stroke();
+		},
+		end: function(evt) {
+			this.started = false;
+		}
+	};
 
-}
+	// Touch Events
+	myCanvas.addEventListener('touchstart', draw.start, false);
+	myCanvas.addEventListener('touchend', draw.end, false);
+	myCanvas.addEventListener('touchmove', draw.move, false);
 
-
-
-
+	// Disable Page Move
+	document.body.addEventListener('touchmove',function(evt){
+		evt.preventDefault();
+	},false);
+};
 	</script>
 
     </html>
