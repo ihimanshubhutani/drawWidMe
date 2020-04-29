@@ -24,8 +24,9 @@
 </head>
 
 <body style="overscroll-behavior: none;">
-
+	<script src="/socket.io/socket.io.js"></script>
 	<script>
+
 		var toggleScreen = function () {
 			var doc = window.document;
 			var docEl = doc.documentElement;
@@ -44,6 +45,9 @@
 	</script>
 
 	<div class="bs-example">
+		<input type="text" style="visibility: hidden; height: 1px; width:1px" id='userinfo' value=<%= username %>>
+		<p id="userroom" style="font-size: 1px; visibility: hidden;"><%=userroom%></p>
+
 
 		<button type="button" onclick="changeColor('yellow')" class="btn btn-warning"
 			style="border-radius: 30px; height: 10px; width: 10px;" data-toggle="button" aria-pressed="false"
@@ -75,6 +79,9 @@
 
 		<script>
 			var color = '';
+			var username = document.getElementById('userinfo').value;
+			var room = document.getElementById('userroom').innerHTML;
+
 			function changeColor(value) {
 				color = value;
 			}
@@ -82,6 +89,21 @@
 			window.onload = function () {
 				var myCanvas = document.getElementById("myCanvas");
 				var ctx = myCanvas.getContext("2d");
+				var ctx2 = myCanvas.getContext("2d");
+
+				var socket = io.connect();
+
+				socket.emit('new user', { username, name, room }, function (data) {
+					socket.messageArray = [];
+				});
+
+
+				socket.on('just joined', (data) => {
+
+					console.log('sening counting of new messages we have to newly joined user');
+					console.log({ sender: socket.id, receiver: data.id, count: socket.messageArray.length, room, name: data.data });
+				});
+
 
 				function resize() {
 					w = window.innerWidth;
@@ -114,6 +136,48 @@
 				ctx.fillStyle = "#fff";
 				ctx.fillRect(0, 0, myCanvas.width, myCanvas.height);
 
+
+
+				socket.on('st', (data) => {
+
+
+					if (data.username === username) {
+						return;
+					}
+
+					console.log('user', data.username, username);
+					ctx2.beginPath();
+					ctx2.moveTo(data.canvasX, data.canvasY);
+
+
+				});
+
+				socket.on('dr', (data) => {
+
+					if (data.username === username) {
+						return;
+					}
+					console.log('inside der');
+					console.log(data.username, data.username);
+					ctx2.lineTo(data.canvasX, data.canvasY);
+					ctx2.stroke();
+
+				});
+
+				socket.on('sd', (data) => {
+
+					console.log('drawing came');
+					if (data.username === username) {
+						return;
+					}
+
+					console.log('stop drawing came');
+					ctx2.closePath();
+
+				})
+
+
+
 				// Mouse Event Handlers
 				if (myCanvas) {
 					var isDown = false;
@@ -126,6 +190,10 @@
 							ctx.beginPath();
 							canvasX = e.pageX - myCanvas.offsetLeft;
 							canvasY = e.pageY - myCanvas.offsetTop;
+							console.log('down', canvasX, canvasY, e.pageX, e.pageY);
+
+							socket.emit('start draw', { room, username, canvasX, canvasY });
+
 							ctx.moveTo(canvasX, canvasY);
 						})
 						.mousemove(function (e) {
@@ -133,6 +201,9 @@
 							if (isDown !== false) {
 								canvasX = e.pageX - myCanvas.offsetLeft;
 								canvasY = e.pageY - myCanvas.offsetTop;
+								console.log('up', canvasX, canvasY);
+								socket.emit('drawing', { room, username, canvasX, canvasY });
+
 								ctx.lineTo(canvasX, canvasY);
 								ctx.strokeStyle = color;
 								ctx.stroke();
@@ -140,6 +211,8 @@
 						})
 						.mouseup(function (e) {
 							isDown = false;
+							console.log('stop');
+							socket.emit('stop drawing', { room, username, canvasX, canvasY });
 							ctx.closePath();
 						});
 				}

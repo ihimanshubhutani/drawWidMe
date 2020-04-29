@@ -16,12 +16,15 @@ app.use(express.static('public'));
 server.listen(process.env.PORT || 3000);
 console.log('ihimanshubhutani started the server ...stay tuned!');
 
-app.get('/connect/ly/:channel/',(req,res)=>{
-  res.render('channel',{roomname:req.params.channel});
+app.get('/connect/ly/:channel/', (req, res) => {
+  res.render('channel', { roomname: req.params.channel });
 });
 
 app.get('/:room/:user', function (req, res) {
-  res.render('index');
+
+  room = req.params.room;
+
+  res.render('index', { username: req.params.user, userroom: room });
 
 });
 
@@ -30,10 +33,10 @@ app.get('/chat/:room/:user', function (req, res) {
   room = req.params.room;
   let userdata = { username: req.params.user, userroom: room }
 
-  res.render('chatapp',userdata);
+  res.render('chatapp', userdata);
 });
 
-app.get('/',function(req,res){
+app.get('/', function (req, res) {
 
   res.render('home');
 });
@@ -60,41 +63,56 @@ io.sockets.on('connection', function (socket) {
     console.log('Disconnected: %s sockets connected', connections.length);
   });
 
+
+  socket.on('start drawing', (data) => {
+    io.sockets.to(data.room).emit('st', data);
+  });
+
+
+  socket.on('drawing', (data) => {
+    io.sockets.to(data.room).emit('dr', data);
+  });
+
+  socket.on('stop drawing', (data) => {
+    console.log('stop');
+    io.sockets.to(data.room).emit('sd', data);
+  });
+
   // Send Message;
   socket.on('send message', function (data) {
 
-    io.sockets.to(data.room).emit('new message', { msg: data.msg, user: socket.username,time:data.time });
+    io.sockets.to(data.room).emit('new message', { msg: data.msg, user: socket.username, time: data.time });
   });
 
   socket.on('joined', (data) => {
 
-    console.log('joined',data);
+    console.log('joined', data);
     id = socket.id;
-    socket.i=0;
+    socket.i = 0;
 
 
   });
 
   socket.on('typing', function (data) {
 
-    if(socket.username==undefined){
+    if (socket.username == undefined) {
 
-    socket.username = data.typing;
-    socket.roomname = data.room;
+      socket.username = data.typing;
+      socket.roomname = data.room;
 
-    if (!roomcollection[socket.roomname]) {
-      roomcollection[socket.roomname] = {'room':[],i:0};
+      if (!roomcollection[socket.roomname]) {
+        roomcollection[socket.roomname] = { 'room': [], i: 0 };
+      }
+      roomcollection[socket.roomname].room.push(socket.username);
+
+
+      updateUsernames(socket.roomname);
+
+      io.sockets.to(data.room).emit('just joined', { data: data.typing, id: socket.id, isback: true });
+
     }
-    roomcollection[socket.roomname].room.push(socket.username);
 
-
-    updateUsernames(socket.roomname);
-
-    io.sockets.to(data.room).emit('just joined', { data: data.typing, id:socket.id,isback:true });
-
-  }
-
-    io.sockets.to(data.room).emit('user typing', {message:data.message, typing:socket.username});
+    io.sockets.to(data.room).emit('user typing', { message: data.message, typing: socket.username });
   });
 
   // New User;
@@ -113,8 +131,8 @@ io.sockets.on('connection', function (socket) {
 
     console.log('socket.id');
     console.log(socket.id);
-    socket.i=0;
-    io.sockets.to(data.room).emit('just joined', { data: data.username, id:socket.id });
+    socket.i = 0;
+    io.sockets.to(data.room).emit('just joined', { data: data.username, id: socket.id });
 
     updateUsernames(socket.roomname);
 
@@ -128,8 +146,8 @@ io.sockets.on('connection', function (socket) {
 
     roomcollection[data.room].i += 1;
 
-    console.log('I receiveid data '+ roomcollection[data.room].i );
-    console.log('I have total '+roomcollection[data.room].room.length);
+    console.log('I receiveid data ' + roomcollection[data.room].i);
+    console.log('I have total ' + roomcollection[data.room].room.length);
 
     if (data.count > maxcount) {
       maxcount = data.count;
@@ -141,7 +159,7 @@ io.sockets.on('connection', function (socket) {
       console.log('i sent the request');
       io.to(maxsenderid).emit('new message', { msg: 'MEUI', user: data.receiver, name: data.name });
       maxcount = 0;
-      roomcollection[data.room].i=0;
+      roomcollection[data.room].i = 0;
       maxsenderid = '';
 
     }
@@ -150,11 +168,11 @@ io.sockets.on('connection', function (socket) {
 
   function updateUsernames(data) {
 
-    if(roomcollection[data]){
+    if (roomcollection[data]) {
 
-    io.sockets.to(data).emit('get users', roomcollection[data].room);
+      io.sockets.to(data).emit('get users', roomcollection[data].room);
 
-  }
+    }
 
   }
 
