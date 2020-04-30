@@ -220,7 +220,7 @@
 							canvasY = e.pageY - myCanvas.offsetTop;
 							console.log('down', canvasX, canvasY, e.pageX, e.pageY);
 
-							socket.emit('start drawing', { room, username, canvasX: e.pageX, canvasY: e.pageY, color, strokeWidth });
+							socket.emit('start drawing', { room, username, color, strokeWidth });
 
 							ctx.moveTo(canvasX, canvasY);
 						})
@@ -239,11 +239,7 @@
 
 
 								console.log(count);
-
 								cordinateArray.push({ canvasX: e.pageX, canvasY: e.pageY, color, strokeWidth });
-
-
-
 								ctx.lineTo(canvasX, canvasY);
 								ctx.strokeStyle = color;
 								ctx.stroke();
@@ -258,12 +254,17 @@
 						});
 				}
 
+				var counti = 0;
 				// Touch Events Handlers
 				draw = {
 					started: false,
 					start: function (evt) {
 
 						ctx.beginPath();
+
+						cordinateArray.push({ canvasX: evt.touches[0].pageX, canvasY: evt.touches[0].pageY, color, strokeWidth });
+
+						socket.emit('start drawing', { room, username, color, strokeWidth });
 
 						ctx.moveTo(
 							evt.touches[0].pageX,
@@ -274,8 +275,14 @@
 
 					},
 					move: function (evt) {
-
 						if (this.started) {
+							counti += 1;
+							if (counti == 5) {
+								counti = 0;
+								socket.emit('drawing', { room, username, canvasX: evt.touches[0].pageX, canvasY: evt.touches[0].pageY, color, strokeWidth });
+								cordinateArray = [];
+							}
+
 							ctx.lineTo(
 								evt.touches[0].pageX,
 								evt.touches[0].pageY
@@ -288,6 +295,9 @@
 
 					},
 					end: function (evt) {
+						socket.emit('stop drawing', { room, username, cordinateArray, color, strokeWidth });
+						cordinateArray = [];
+						counti = 0;
 						this.started = false;
 					}
 				};
