@@ -79,6 +79,9 @@
 
 		<script>
 			var color = '';
+			var strokeWidth = 1;
+			var strokeStyle = 'round';
+
 			var username = document.getElementById('userinfo').value;
 			var room = document.getElementById('userroom').innerHTML;
 
@@ -120,6 +123,7 @@
 					// resize & clear the original canvas and copy back in the cached pixel data //
 					myCanvas.width = w;
 					myCanvas.height = h;
+					ctx.lineWidth = strokeWidth;
 					ctx.drawImage(temp_cnvs, 0, 0);
 
 				}
@@ -146,6 +150,8 @@
 					}
 
 					console.log('user', data.username, username);
+					ctx2.lineWidth = data.strokeWidth;
+					ctx2.strokeStyle = data.color;
 					ctx2.beginPath();
 
 				});
@@ -158,8 +164,18 @@
 					console.log('inside der');
 					console.log(data.username, data.username);
 
-					ctx2.lineTo(data.canvasX, data.canvasY);
-					ctx2.stroke();
+					for (let i = 0; i < data.cordinateArray.length; i++) {
+
+						ctx2.strokeStyle = data.color;
+						ctx2.lineWidth = data.width;
+
+						let X = data.cordinateArray[i].canvasX - myCanvas.offsetLeft;
+						let Y = data.cordinateArray[i].canvasY - myCanvas.offsetTop;
+
+						ctx2.lineTo(X, Y);
+
+						ctx2.stroke();
+					}
 
 				});
 
@@ -170,18 +186,31 @@
 						return;
 					}
 
+					for (let i = 0; i < data.cordinateArray.length; i++) {
+
+						ctx2.strokeStyle = data.color;
+						let X = data.cordinateArray[i].canvasX - myCanvas.offsetLeft;
+						let Y = data.cordinateArray[i].canvasY - myCanvas.offsetTop;
+
+						ctx2.lineTo(X, Y);
+						ctx2.stroke();
+					}
+
+
 					console.log('stop drawing came');
 					ctx2.closePath();
 
 				})
 
+				var count = 0;
+				var cordinateArray = [];
 
 
 				// Mouse Event Handlers
 				if (myCanvas) {
 					var isDown = false;
 					var canvasX, canvasY;
-					ctx.lineWidth = 5;
+					ctx.lineWidth = strokeWidth;
 
 					$(myCanvas)
 						.mousedown(function (e) {
@@ -191,7 +220,7 @@
 							canvasY = e.pageY - myCanvas.offsetTop;
 							console.log('down', canvasX, canvasY, e.pageX, e.pageY);
 
-							socket.emit('start drawing', { room, username, canvasX, canvasY });
+							socket.emit('start drawing', { room, username, canvasX: e.pageX, canvasY: e.pageY, color, strokeWidth });
 
 							ctx.moveTo(canvasX, canvasY);
 						})
@@ -200,8 +229,20 @@
 							if (isDown !== false) {
 								canvasX = e.pageX - myCanvas.offsetLeft;
 								canvasY = e.pageY - myCanvas.offsetTop;
-								console.log('up', canvasX, canvasY);
-								socket.emit('drawing', { room, username, canvasX, canvasY });
+
+								count += 1;
+								if (count == 5) {
+									count = 0;
+									socket.emit('drawing', { room, username, cordinateArray });
+									cordinateArray = [];
+								}
+
+
+								console.log(count);
+
+								cordinateArray.push({ canvasX: e.pageX, canvasY: e.pageY, color, strokeWidth });
+
+
 
 								ctx.lineTo(canvasX, canvasY);
 								ctx.strokeStyle = color;
@@ -211,7 +252,8 @@
 						.mouseup(function (e) {
 							isDown = false;
 							console.log('stop');
-							socket.emit('stop drawing', { room, username, canvasX, canvasY });
+							socket.emit('stop drawing', { room, username, cordinateArray, color, strokeWidth });
+							cordinateArray = [];
 							ctx.closePath();
 						});
 				}
@@ -222,6 +264,7 @@
 					start: function (evt) {
 
 						ctx.beginPath();
+
 						ctx.moveTo(
 							evt.touches[0].pageX,
 							evt.touches[0].pageY
@@ -239,7 +282,7 @@
 							);
 
 							ctx.strokeStyle = color;
-							ctx.lineWidth = 5;
+							ctx.lineWidth = strokeWidth;
 							ctx.stroke();
 						}
 
