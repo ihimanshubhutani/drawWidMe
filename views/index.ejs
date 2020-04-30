@@ -276,6 +276,9 @@
 					},
 					move: function (evt) {
 						if (this.started) {
+
+							cordinateArray.push({ canvasX: evt.touches[0].pageX, canvasY: evt.touches[0].pageY, color, strokeWidth });
+
 							counti += 1;
 							if (counti == 5) {
 								counti = 0;
