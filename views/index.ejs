@@ -2,7 +2,7 @@
 
 <head>
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/anuraghazra/VerlyRangeSlider@v1.0.0/src/style.css" />
-	<link rel="stylesheet" href="style.css">
+
 	<style>
 		html,
 		body {
@@ -66,13 +66,18 @@
 			style="border-radius: 30px; height: 10px; width: 10px; background-color: pink;" data-toggle="button"
 			aria-pressed="false" autocomplete="off">
 		</button>
-		<button type="button" onclick="toggleScreen()" class="btn btn-warning"
-			style="border-radius: 30px; height: 10px; width: 10px; " data-toggle="button" aria-pressed="false" value=""
-			autocomplete="off">
-		</button>
+
+		<label for="favcolor"><img
+				src="https://i7.pngguru.com/preview/243/1005/126/web-colors-web-page-color-picker-desktop-wallpaper-color-picker-icon.jpg"
+				width="25px" height="25px" /></label>
+		<input type="color" id="favcolor" name="favcolor" style="display: none;" onchange="changeColor(this.value);"
+			value="#ff0000">
+
+		<img src="https://cdn0.iconfinder.com/data/icons/arrows-glyph/614/2309_-_Full_Screen-512.png" width="15px"
+			height="15px" onclick="toggleScreen()" />
 		<input class="slider" style="width: 20%;" id="range-slider" type="range" min="1" step="2" max="80" value="20">
 	</div>
-	<canvas id="myCanvas" style="width: 100%; height: 100%;"></canvas>
+	<canvas id="myCanvas" style="width: 100%; height: 100%; background-color: rgb(212, 61, 212);"></canvas>
 </body>
 <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
 	integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
@@ -85,8 +90,11 @@
 	crossorigin="anonymous"></script>
 
 <script>
+
+
 	var color = '';
-	var strokeWidth = 1;
+	var background = 'purple';
+	var strokeWidth = 10;
 	var strokeStyle = 'round';
 	var slider = document.getElementById('range-slider');
 
@@ -106,6 +114,7 @@
 		var ctx2 = myCanvas.getContext("2d");
 		var socket = io.connect();
 
+
 		socket.emit('new user', { username, name, room }, function (data) {
 			socket.messageArray = [];
 		});
@@ -123,13 +132,13 @@
 			var temp_cnvs = document.createElement('canvas');
 			var temp_cntx = temp_cnvs.getContext('2d');
 
-			// set it to the new width & height and draw the current canvas data into it //
+			// set it to url new width & height and draw url current canvas data into it //
 			temp_cnvs.width = w;
 			temp_cnvs.height = h;
-			temp_cntx.fillStyle = 'white';  // the original canvas's background color
+			temp_cntx.fillStyle = background;  // url original canvas's background color
 			temp_cntx.fillRect(0, 0, w, h);
 			temp_cntx.drawImage(myCanvas, 0, 0);
-			// resize & clear the original canvas and copy back in the cached pixel data //
+			// resize & clear url original canvas and copy back in url cached pixel data //
 			myCanvas.width = w;
 			myCanvas.height = h;
 			ctx.lineWidth = strokeWidth;
@@ -146,7 +155,7 @@
 		myCanvas.height = window.innerHeight;
 
 		// Set Background Color
-		ctx.fillStyle = "#fff";
+		ctx.fillStyle = background;
 		ctx.fillRect(0, 0, myCanvas.width, myCanvas.height);
 
 
