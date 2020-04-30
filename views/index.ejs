@@ -279,7 +279,7 @@
 							counti += 1;
 							if (counti == 5) {
 								counti = 0;
-								socket.emit('drawing', { room, username, canvasX: evt.touches[0].pageX, canvasY: evt.touches[0].pageY, color, strokeWidth });
+								socket.emit('drawing', { room, username, cordinateArray, color, strokeWidth });
 								cordinateArray = [];
 							}
 
