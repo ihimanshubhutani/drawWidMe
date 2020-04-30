@@ -30,10 +30,9 @@ app.get('/:room/:user', function (req, res) {
 
 app.get('/chat/:room/:user', function (req, res) {
 
-  room = req.params.room;
-  let userdata = { username: req.params.user, userroom: room }
 
-  res.render('chatapp', userdata);
+
+  res.render('rangeslider.js');
 });
 
 app.get('/', function (req, res) {
