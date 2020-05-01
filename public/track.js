@@ -6,11 +6,13 @@ let updateNote = document.getElementById("updatenote");
 const canvas2 = document.getElementById("canvas2");
 const ctx = canvas2.getContext("2d");
 
+alert("This is Experimental Feature by Himanshu, This Model detects your hand and according to that it moves the pen Wait While model is loading then click on Button");
+
 canvas2.width = window.innerWidth;
 canvas2.height = window.innerHeight;
 
 
-ctx.lineWidth = 20;
+ctx.lineWidth = 5;
 ctx.strokeStyle = "round";
 ctx.fillStyle = 'red';
 ctx.fillRect(0, 0, canvas2.width, canvas2.height);
@@ -51,6 +53,33 @@ function toggleVideo() {
         updateNote.innerText = "Video stopped"
     }
 }
+
+
+function resize() {
+    w = window.innerWidth;
+    h = window.innerHeight;
+    var temp_cnvs = document.createElement('canvas');
+    var temp_cntx = temp_cnvs.getContext('2d');
+
+    // set it to url new width & height and draw url current canvas data into it //
+    temp_cnvs.width = w;
+    temp_cnvs.height = h;
+    temp_cntx.fillStyle = 'red';  // url original canvas's background color
+    temp_cntx.fillRect(0, 0, w, h);
+    temp_cntx.drawImage(canvas, 0, 0);
+    // resize & clear url original canvas and copy back in url cached pixel data //
+    canvas2.width = w;
+    canvas2.height = h;
+    ctx.lineWidth = 5;
+    ctx.drawImage(temp_cnvs, 0, 0);
+
+}
+
+// add event listeners to specify when functions should be triggered
+window.addEventListener("resize", resize);
+
+
+
 
 
 var flag = false;

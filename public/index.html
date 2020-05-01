@@ -8,17 +8,54 @@
   <title>Draw With Phone</title>
   <link rel="stylesheet" href="track.css" />
 </head>
+<script>
+  var toggleScreen = function () {
+    var doc = window.document;
+    var docEl = doc.documentElement;
 
-<body>
+    var requestFullScreen = docEl.requestFullscreen || docEl.mozRequestFullScreen || docEl.webkitRequestFullScreen || docEl.msRequestFullscreen;
+    var cancelFullScreen = doc.exitFullscreen || doc.mozCancelFullScreen || doc.webkitExitFullscreen || doc.msExitFullscreen;
 
-  <div class="tracker">
+    if (!doc.fullscreenElement && !doc.mozFullScreenElement && !doc.webkitFullscreenElement && !doc.msFullscreenElement) {
+      requestFullScreen.call(docEl);
+    }
+    else {
+      cancelFullScreen.call(doc);
+    }
+
+  };
+</script>
+
+<body style="overscroll-behavior: none;">
+
+  <div class=" tracker">
     <video id="myvideo"></video>
     <canvas id="canvas" class="border"></canvas>
     <button id="trackbutton" disabled onclick="toggleVideo()">Button</button>
+    <img src="https://cdn0.iconfinder.com/data/icons/arrows-glyph/614/2309_-_Full_Screen-512.png" width="15px"
+      height="15px" onclick="toggleScreen()" />
+
     <div id="updatenote">hello</div>
   </div>
 
   <canvas id="canvas2"></canvas>
+  <script>
+    var toggleScreen = function () {
+      var doc = window.document;
+      var docEl = doc.documentElement;
+
+      var requestFullScreen = docEl.requestFullscreen || docEl.mozRequestFullScreen || docEl.webkitRequestFullScreen || docEl.msRequestFullscreen;
+      var cancelFullScreen = doc.exitFullscreen || doc.mozCancelFullScreen || doc.webkitExitFullscreen || doc.msExitFullscreen;
+
+      if (!doc.fullscreenElement && !doc.mozFullScreenElement && !doc.webkitFullscreenElement && !doc.msFullscreenElement) {
+        requestFullScreen.call(docEl);
+      }
+      else {
+        cancelFullScreen.call(doc);
+      }
+
+    };
+  </script>
 
   <script src="https://cdn.jsdelivr.net/npm/handtrackjs/dist/handtrack.min.js"></script>
   <script src="track.js"></script>
