@@ -6,13 +6,24 @@ let updateNote = document.getElementById("updatenote");
 const canvas2 = document.getElementById("canvas2");
 const ctx = canvas2.getContext("2d");
 
+canvas2.width = window.innerWidth;
+canvas2.height = window.innerHeight;
+
+ctx.fillStyle = 'red';
+ctx.fillRect(0, 0, canvas2.width, canvas2.height);
+
+ctx.beginPath();
+ctx.moveTo(0, 0);
+ctx.lineTo(70, 380);
+ctx.stroke();
+
 
 let isVideo = false;
 let model = null;
 
 const modelParams = {
     flipHorizontal: true,   // flip e.g for video
-    maxNumBoxes: 20,        // maximum number of boxes to detect
+    maxNumBoxes: 1,        // maximum number of boxes to detect
     iouThreshold: 0.5,      // ioU threshold for non-max suppression
     scoreThreshold: 0.6,    // confidence threshold for predictions.
 }
@@ -45,6 +56,7 @@ function toggleVideo() {
 
 
 var flag = false;
+var x, y;
 
 function runDetection() {
     model.detect(video).then(predictions => {
@@ -57,7 +69,9 @@ function runDetection() {
             if (!flag) {
                 if (predictions[0]) {
                     ctx.beginPath();
-                    ctx.moveTo(Math.floor(predictions[0].bbox[0]) - canvas.offsetLeft, Math.floor(predictions[0].bbox[1]) - canvas.offsetTop);
+                    x = predictions[0].bbox[0] + predictions[0].bbox[2] / 2;
+                    y = predictions[0].bbox[1] + predictions[0].bbox[3] / 2;
+                    ctx.moveTo(x - canvas2.offsetLeft, y - canvas2.offsetTop);
                     flag = true;
                 }
             }
@@ -70,7 +84,9 @@ function runDetection() {
                 }
 
                 else {
-                    ctx.lineTo(Math.floor(predictions[0].bbox[0]) - Math.floor(canvas.offsetLeft), predictions[0].bbox[1] - canvas.offsetTop);
+                    x = predictions[0].bbox[0] + predictions[0].bbox[2] / 2;
+                    y = predictions[0].bbox[1] + predictions[0].bbox[3] / 2;
+                    ctx.lineTo(x - canvas.offsetLeft, y - canvas.offsetTop);
                     ctx.stroke();
                 }
             }
