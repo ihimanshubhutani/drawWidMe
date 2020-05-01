@@ -7,8 +7,6 @@ const canvas2 = document.getElementById("canvas2");
 const ctx = canvas2.getContext("2d");
 
 
-ctx.strokeStyle = 'black';
-
 let isVideo = false;
 let model = null;
 
@@ -59,7 +57,7 @@ function runDetection() {
             if (!flag) {
                 if (predictions[0]) {
                     ctx.beginPath();
-                    ctx.moveTo(predictions[0].bbox[0], predictions[0].bbox[1]);
+                    ctx.moveTo(Math.floor(predictions[0].bbox[0]) - canvas.offsetLeft, Math.floor(predictions[0].bbox[1]) - canvas.offsetTop);
                     flag = true;
                 }
             }
@@ -72,7 +70,7 @@ function runDetection() {
                 }
 
                 else {
-                    ctx.lineTo(predictions[0].bbox[0], predictions[0].bbox[1]);
+                    ctx.lineTo(Math.floor(predictions[0].bbox[0]) - Math.floor(canvas.offsetLeft), predictions[0].bbox[1] - canvas.offsetTop);
                     ctx.stroke();
                 }
             }

@@ -7,6 +7,9 @@
   <title>Draw Experiment Himanshu</title>
   <link rel="stylesheet" href="https://unpkg.com/carbon-components@latest/css/carbon-components.css" />
   <link rel="stylesheet" href="track.css">
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+    integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+    crossorigin="anonymous"></script>
 </head>
 
 <body class="bx--body p20">
@@ -17,13 +20,13 @@
     </button>
     <div id="updatenote" class="updatenote mt10"> loading model ..</div>
   </div>
-  <video class="videobox canvasbox" style="display: no;" autoplay="autoplay" id="myvideo"></video>
+  <video class="videobox canvasbox" style="display: none;" autoplay="autoplay" id="myvideo"></video>
 
   <canvas id="canvas" style="display: none;" class="border canvasbox"></canvas>
-  <canvas id="canvas2" style="border:1px solid #d3d3d3; width:400px; height: 338px;">
-    <script src="https://unpkg.com/carbon-components@latest/scripts/carbon-components.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/handtrackjs/dist/handtrack.min.js"> </script>
-    <script src="track.js"></script>
+  <canvas id="canvas2" style="width:100%; height: 100%"></canvas>
+  <script src="https://unpkg.com/carbon-components@latest/scripts/carbon-components.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/handtrackjs/dist/handtrack.min.js"> </script>
+  <script src="track.js"></script>
 </body>
 
 </html>
