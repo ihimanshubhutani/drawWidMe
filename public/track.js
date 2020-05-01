@@ -9,13 +9,11 @@ const ctx = canvas2.getContext("2d");
 canvas2.width = window.innerWidth;
 canvas2.height = window.innerHeight;
 
+
+ctx.lineWidth = 20;
+ctx.strokeStyle = "round";
 ctx.fillStyle = 'red';
 ctx.fillRect(0, 0, canvas2.width, canvas2.height);
-
-ctx.beginPath();
-ctx.moveTo(0, 0);
-ctx.lineTo(70, 380);
-ctx.stroke();
 
 
 let isVideo = false;
@@ -25,7 +23,7 @@ const modelParams = {
     flipHorizontal: true,   // flip e.g for video
     maxNumBoxes: 1,        // maximum number of boxes to detect
     iouThreshold: 0.5,      // ioU threshold for non-max suppression
-    scoreThreshold: 0.6,    // confidence threshold for predictions.
+    scoreThreshold: 0.7,    // confidence threshold for predictions.
 }
 
 
