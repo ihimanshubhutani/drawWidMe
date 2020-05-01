@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <meta charset="UTF-8">
+  <title>Draw Experiment Himanshu</title>
+  <link rel="stylesheet" href="https://unpkg.com/carbon-components@latest/css/carbon-components.css" />
+  <link rel="stylesheet" href="track.css">
+</head>
+
+<body class="bx--body p20">
+
+  <div class="mb10">
+    <button onclick="toggleVideo()" id="trackbutton" class="bx--btn bx--btn--secondary" type="button">
+      Toggle Video
+    </button>
+    <div id="updatenote" class="updatenote mt10"> loading model ..</div>
+  </div>
+  <video class="videobox canvasbox" style="display: no;" autoplay="autoplay" id="myvideo"></video>
+
+  <canvas id="canvas" style="display: none;" class="border canvasbox"></canvas>
+  <canvas id="canvas2" style="border:1px solid #d3d3d3; width:400px; height: 338px;">
+    <script src="https://unpkg.com/carbon-components@latest/scripts/carbon-components.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/handtrackjs/dist/handtrack.min.js"> </script>
+    <script src="track.js"></script>
+</body>
+
+</html>
