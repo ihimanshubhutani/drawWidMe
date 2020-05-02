@@ -458,7 +458,14 @@
 
 			cordinateArray.push({ canvasX: evt.touches[0].pageX, canvasY: evt.touches[0].pageY, color, strokeWidth });
 
-			socket.emit('start drawing', { room, username, color, strokeWidth });
+			if (!recording) {
+				socket.emit('start drawing', { room, username, color, strokeWidth });
+			}
+
+
+			else {
+				userarray.push({ send: true, room, username, color, strokeWidth });
+			}
 
 			ctx.moveTo(
 				evt.touches[0].pageX,
@@ -476,8 +483,13 @@
 				counti += 1;
 				if (counti == 5) {
 					counti = 0;
-					socket.emit('drawing', { room, username, cordinateArray, color, strokeWidth });
-					cordinateArray = [];
+					if (!recording) {
+						socket.emit('drawing', { room, username, cordinateArray });
+
+					}
+					else {
+						userarray.push({ send: true, room, username, cordinateArray });
+					} cordinateArray = [];
 				}
 
 				ctx.lineTo(
@@ -492,7 +504,20 @@
 
 		},
 		end: function (evt) {
-			socket.emit('stop drawing', { room, username, cordinateArray, color, strokeWidth });
+
+			if (!recording) {
+				socket.emit('stop drawing', { room, username, cordinateArray, color, strokeWidth });
+
+			}
+
+			else {
+				userarray.push({ send: true, username, cordinateArray, color, strokeWidth });
+				messageArray.push(userarray);
+				console.log(messageArray);
+				userarray = [];
+			}
+
+
 			cordinateArray = [];
 			counti = 0;
 			this.started = false;
