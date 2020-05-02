@@ -26,6 +26,14 @@
 
 <script src="/socket.io/socket.io.js"></script>
 <script>
+
+	function pause(milliseconds) {
+		var dt = new Date();
+		while ((new Date()) - dt <= milliseconds) { /* Do nothing */ }
+	}
+
+
+
 	var toggleScreen = function () {
 		var doc = window.document;
 		var docEl = doc.documentElement;
@@ -100,9 +108,19 @@
 		<input type="color" id="favcolor" name="favcolor" style="display: none;" onchange="changeColor(this.value);"
 			value="#ff0000">
 
-		<img src="https://cdn0.iconfinder.com/data/icons/arrows-glyph/614/2309_-_Full_Screen-512.png" width="15px"
-			height="15px" onclick="toggleScreen()" />
+		<img src="https://cdn0.iconfinder.com/data/icons/arrows-glyph/614/2309_-_Full_Screen-512.png" width="25px"
+			height="25px" onclick="toggleScreen()" />
 		<input class="slider" style="width: 20%;" id="range-slider" type="range" min="1" step="2" max="80" value="20">
+		<img id="start" src="https://cdn3.iconfinder.com/data/icons/flat-icons-web/40/Record-512.png" width="25px"
+			height="25px" onclick="startRecording()" />
+		<img id="pause" style="display: none;"
+			src="https://cdn0.iconfinder.com/data/icons/multimedia-126/24/202_-_Multimedia_pause_icon_circle_button-512.png"
+			width="25px" height="25px" onclick="stopRecording()" />
+		<img id="start"
+			src="https://cdn4.iconfinder.com/data/icons/proglyphs-mailing-and-messaging/512/Paper_Plane-512.png"
+			width="25px" height="25px" onclick="sendRecording()" />
+
+
 	</div>
 	<canvas id="myCanvas" style="width: 100%; height: 100%; "></canvas>
 </body>
@@ -117,8 +135,8 @@
 	crossorigin="anonymous"></script>
 
 <script>
-
-
+	var messageArray = [];
+	var recording = false;
 	var color = '';
 	var background = 'white';
 	var strokeWidth = 10;
@@ -133,80 +151,155 @@
 		color = value;
 	}
 
+	function startRecording() {
+		if (recording) {
+			recording = false;
+			return;
+		}
+		recording = true;
+		document.getElementById("start").style.display = "none";
+
+		document.getElementById("pause").style.display = "";
+
+	}
 
 
-	window.onload = function () {
-		var myCanvas = document.getElementById("myCanvas");
-		var ctx = myCanvas.getContext("2d");
-		var ctx2 = myCanvas.getContext("2d");
-		var socket = io.connect();
+	function stopRecording() {
+
+		recording = false;
+		document.getElementById("pause").style.display = "none";
+
+		document.getElementById("start").style.display = "";
+
+	}
 
 
-		socket.emit('new user', { username, name, room }, function (data) {
-			socket.messageArray = [];
-		});
 
-		socket.on('just joined', (data) => {
+
+	function sendRecording() {
+
+
+
+
+		console.log('send recording called');
+		console.log(messageArray);
+
+		for (let i = 0; i < messageArray.length; i++) {
+
+			socket.emit('start drawing', messageArray[i][0]);
+
+			for (let j = 1; j < messageArray[i].length - 1; j++) {
+
+				socket.emit('drawing', messageArray[i][j]);
+
+
+			}
+			socket.emit('stop drawing', messageArray[i][messageArray[i].length - 1]);
+
+		}
+	}
+
+	var myCanvas = document.getElementById("myCanvas");
+	var ctx = myCanvas.getContext("2d");
+	let ctx2 = myCanvas.getContext("2d");
+	ctx2.lineCap = "round";
+	var socket = io.connect();
+
+
+	socket.emit('new user', { username, name, room }, function (data) {
+		messageArray = [];
+	});
+
+	socket.on('just joined', (data) => {
+
+		if (data.data !== username) {
 			alert(data.data + ' joined in this board');
-			console.log({ sender: socket.id, receiver: data.id, count: socket.messageArray.length, room, name: data.data });
-		});
+			console.log({ sender: socket.id, receiver: data.id, count: messageArray.length, room, name: data.data });
+		}
+	});
 
 
-		function resize() {
-			w = window.innerWidth;
-			h = window.innerHeight;
-			var temp_cnvs = document.createElement('canvas');
-			var temp_cntx = temp_cnvs.getContext('2d');
+	function resize() {
+		w = window.innerWidth;
+		h = window.innerHeight;
+		var temp_cnvs = document.createElement('canvas');
+		var temp_cntx = temp_cnvs.getContext('2d');
 
-			// set it to url new width & height and draw url current canvas data into it //
-			temp_cnvs.width = w;
-			temp_cnvs.height = h;
-			temp_cntx.fillStyle = background;  // url original canvas's background color
-			temp_cntx.fillRect(0, 0, w, h);
-			temp_cntx.drawImage(myCanvas, 0, 0);
-			// resize & clear url original canvas and copy back in url cached pixel data //
-			myCanvas.width = w;
-			myCanvas.height = h;
-			ctx.lineWidth = strokeWidth;
-			ctx.drawImage(temp_cnvs, 0, 0);
+		// set it to url new width & height and draw url current canvas data into it //
+		temp_cnvs.width = w;
+		temp_cnvs.height = h;
+		temp_cntx.fillStyle = background;  // url original canvas's background color
+		temp_cntx.fillRect(0, 0, w, h);
+		temp_cntx.drawImage(myCanvas, 0, 0);
+		// resize & clear url original canvas and copy back in url cached pixel data //
+		myCanvas.width = w;
+		myCanvas.height = h;
+		ctx.lineWidth = strokeWidth;
+		ctx.drawImage(temp_cnvs, 0, 0);
+
+	}
+
+	// add event listeners to specify when functions should be triggered
+	window.addEventListener("resize", resize);
+
+
+	// Fill Window Width and Height
+	myCanvas.width = window.innerWidth;
+	myCanvas.height = window.innerHeight;
+
+	// Set Background Color
+	ctx.fillStyle = background;
+	ctx.fillRect(0, 0, myCanvas.width, myCanvas.height);
+
+
+
+	socket.on('st', (data) => {
+
+
+		if (data.username === username) {
+			return;
+		}
+
+		console.log('user', data.username, username);
+		ctx2.lineWidth = data.strokeWidth;
+		ctx2.strokeStyle = data.color;
+		ctx2.beginPath();
+
+	});
+
+
+	socket.on('dr', (data) => {
+
+		if (data.username === username) {
+			return;
+		}
+		console.log(data.cordinateArray);
+		console.log(data.username, data.username);
+
+		if (data.send) {
+
+
+
+			for (let i = 0; i < data.cordinateArray.length; i++) {
+
+
+				let ctx3 = ctx2;
+
+				ctx3.strokeStyle = data.color;
+				ctx3.lineWidth = data.width;
+
+				let X = data.cordinateArray[i].canvasX - myCanvas.offsetLeft;
+				let Y = data.cordinateArray[i].canvasY - myCanvas.offsetTop;
+
+				ctx3.lineTo(X, Y);
+
+				ctx3.stroke();
+
+			}
 
 		}
 
-		// add event listeners to specify when functions should be triggered
-		window.addEventListener("resize", resize);
-
-
-		// Fill Window Width and Height
-		myCanvas.width = window.innerWidth;
-		myCanvas.height = window.innerHeight;
-
-		// Set Background Color
-		ctx.fillStyle = background;
-		ctx.fillRect(0, 0, myCanvas.width, myCanvas.height);
-
-
-
-		socket.on('st', (data) => {
-
-
-			if (data.username === username) {
-				return;
-			}
-
-			console.log('user', data.username, username);
-			ctx2.lineWidth = data.strokeWidth;
-			ctx2.strokeStyle = data.color;
-			ctx2.beginPath();
-
-		});
-
-		socket.on('dr', (data) => {
-
-			if (data.username === username) {
-				return;
-			}
-			console.log(data.cordinateArray);
-			console.log(data.username, data.username);
+		else {
 
 			for (let i = 0; i < data.cordinateArray.length; i++) {
 
@@ -219,155 +312,206 @@
 				ctx2.lineTo(X, Y);
 
 				ctx2.stroke();
+
+
+			}
+		}
+
+	});
+
+	socket.on('sd', (data) => {
+
+		console.log('drawing came');
+		if (data.username === username) {
+			return;
+		}
+
+
+
+		for (let i = 0; i < data.cordinateArray.length; i++) {
+
+			if (data.send) {
+				setTimeout(() => {
+					ctx2.strokeStyle = data.color;
+					let X = data.cordinateArray[i].canvasX - myCanvas.offsetLeft;
+					let Y = data.cordinateArray[i].canvasY - myCanvas.offsetTop;
+
+					ctx2.lineTo(X, Y);
+					ctx2.stroke();
+				}, 10000);
 			}
 
-		});
-
-		socket.on('sd', (data) => {
-
-			console.log('drawing came');
-			if (data.username === username) {
-				return;
-			}
-
-			for (let i = 0; i < data.cordinateArray.length; i++) {
+			else {
 
 				ctx2.strokeStyle = data.color;
 				let X = data.cordinateArray[i].canvasX - myCanvas.offsetLeft;
 				let Y = data.cordinateArray[i].canvasY - myCanvas.offsetTop;
 
 				ctx2.lineTo(X, Y);
+
 				ctx2.stroke();
+
 			}
-
-
-			console.log('stop drawing came');
-			ctx2.closePath();
-
-		})
-
-		var count = 0;
-		var cordinateArray = [];
-
-
-		// Mouse Event Handlers
-		if (myCanvas) {
-			var isDown = false;
-			var canvasX, canvasY;
-			ctx.lineWidth = strokeWidth;
-
-			$(myCanvas)
-				.mousedown(function (e) {
-
-					isDown = true;
-					ctx.beginPath();
-					canvasX = e.pageX - myCanvas.offsetLeft;
-					canvasY = e.pageY - myCanvas.offsetTop;
-					console.log('down', canvasX, canvasY, e.pageX, e.pageY);
-
-					socket.emit('start drawing', { room, username, color, strokeWidth });
-					ctx.lineWidth = strokeWidth;
-					ctx.moveTo(canvasX, canvasY);
-				})
-				.mousemove(function (e) {
-
-					if (isDown !== false) {
-						canvasX = e.pageX - myCanvas.offsetLeft;
-						canvasY = e.pageY - myCanvas.offsetTop;
-
-						count += 1;
-						if (count == 5) {
-							count = 0;
-							socket.emit('drawing', { room, username, cordinateArray });
-							cordinateArray = [];
-						}
-
-
-						console.log(count);
-						cordinateArray.push({ canvasX: e.pageX, canvasY: e.pageY, color, strokeWidth });
-
-						ctx.lineWidth = strokeWidth;
-
-						ctx.lineTo(canvasX, canvasY);
-						ctx.strokeStyle = color;
-						ctx.stroke();
-					}
-				})
-				.mouseup(function (e) {
-					isDown = false;
-					console.log('stop');
-					socket.emit('stop drawing', { room, username, cordinateArray, color, strokeWidth });
-					cordinateArray = [];
-					ctx.closePath();
-				});
 		}
 
-		var counti = 0;
-		// Touch Events Handlers
-		draw = {
-			started: false,
-			start: function (evt) {
 
+		console.log('stop drawing came');
+		ctx2.closePath();
+
+	})
+
+	var count = 0;
+	var cordinateArray = [];
+	let userarray = [];
+
+	// Mouse Event Handlers
+	if (myCanvas) {
+		var isDown = false;
+		var canvasX, canvasY;
+		ctx.lineWidth = strokeWidth;
+
+
+		$(myCanvas)
+			.mousedown(function (e) {
+
+				isDown = true;
 				ctx.beginPath();
+				canvasX = e.pageX - myCanvas.offsetLeft;
+				canvasY = e.pageY - myCanvas.offsetTop;
+				console.log('down', canvasX, canvasY, e.pageX, e.pageY);
+
+				if (!recording) {
+					socket.emit('start drawing', { room, username, color, strokeWidth });
+				}
+
+
+				else {
+					userarray.push({ send: true, room, username, color, strokeWidth });
+				}
+
+				ctx.lineWidth = strokeWidth;
+
+
+				ctx.moveTo(canvasX, canvasY);
+			})
+			.mousemove(function (e) {
+
+				if (isDown !== false) {
+					canvasX = e.pageX - myCanvas.offsetLeft;
+					canvasY = e.pageY - myCanvas.offsetTop;
+
+
+					count += 1;
+					if (count == 5) {
+						count = 0;
+						if (!recording) {
+							socket.emit('drawing', { room, username, cordinateArray });
+
+						}
+						else {
+							userarray.push({ send: true, room, username, cordinateArray });
+						}
+
+						cordinateArray = [];
+					}
+
+
+
+					cordinateArray.push({ canvasX: e.pageX, canvasY: e.pageY, color, strokeWidth });
+
+					ctx.lineWidth = strokeWidth;
+
+					ctx.lineTo(canvasX, canvasY);
+					ctx.strokeStyle = color;
+					ctx.stroke();
+				}
+			})
+			.mouseup(function (e) {
+				isDown = false;
+				console.log('stop');
+
+				if (!recording) {
+					socket.emit('stop drawing', { room, username, cordinateArray, color, strokeWidth });
+
+				}
+
+				else {
+					userarray.push({ send: true, username, cordinateArray, color, strokeWidth });
+					messageArray.push(userarray);
+					console.log(messageArray);
+					userarray = [];
+				}
+				cordinateArray = [];
+				ctx.closePath();
+			});
+	}
+
+	var counti = 0;
+	// Touch Events Handlers
+	draw = {
+		started: false,
+		start: function (evt) {
+
+			ctx.beginPath();
+
+			cordinateArray.push({ canvasX: evt.touches[0].pageX, canvasY: evt.touches[0].pageY, color, strokeWidth });
+
+			socket.emit('start drawing', { room, username, color, strokeWidth });
+
+			ctx.moveTo(
+				evt.touches[0].pageX,
+				evt.touches[0].pageY
+			);
+
+			this.started = true;
+
+		},
+		move: function (evt) {
+			if (this.started) {
 
 				cordinateArray.push({ canvasX: evt.touches[0].pageX, canvasY: evt.touches[0].pageY, color, strokeWidth });
 
-				socket.emit('start drawing', { room, username, color, strokeWidth });
+				counti += 1;
+				if (counti == 5) {
+					counti = 0;
+					socket.emit('drawing', { room, username, cordinateArray, color, strokeWidth });
+					cordinateArray = [];
+				}
 
-				ctx.moveTo(
+				ctx.lineTo(
 					evt.touches[0].pageX,
 					evt.touches[0].pageY
 				);
 
-				this.started = true;
-
-			},
-			move: function (evt) {
-				if (this.started) {
-
-					cordinateArray.push({ canvasX: evt.touches[0].pageX, canvasY: evt.touches[0].pageY, color, strokeWidth });
-
-					counti += 1;
-					if (counti == 5) {
-						counti = 0;
-						socket.emit('drawing', { room, username, cordinateArray, color, strokeWidth });
-						cordinateArray = [];
-					}
-
-					ctx.lineTo(
-						evt.touches[0].pageX,
-						evt.touches[0].pageY
-					);
-
-					ctx.strokeStyle = color;
-					ctx.lineWidth = strokeWidth;
-					ctx.stroke();
-				}
-
-			},
-			end: function (evt) {
-				socket.emit('stop drawing', { room, username, cordinateArray, color, strokeWidth });
-				cordinateArray = [];
-				counti = 0;
-				this.started = false;
+				ctx.strokeStyle = color;
+				ctx.lineWidth = strokeWidth;
+				ctx.stroke();
 			}
-		};
 
-
-
-		slider.addEventListener('change', e => {
-			strokeWidth = slider.value;
-		})
-		// Touch Events
-		myCanvas.addEventListener('touchstart', draw.start, false);
-		myCanvas.addEventListener('touchend', draw.end, false);
-		myCanvas.addEventListener('touchmove', draw.move, false);
-
-		// Disable Page Move
-		document.body.addEventListener('touchmove', function (evt) {
-			evt.preventDefault();
-		}, false);
+		},
+		end: function (evt) {
+			socket.emit('stop drawing', { room, username, cordinateArray, color, strokeWidth });
+			cordinateArray = [];
+			counti = 0;
+			this.started = false;
+		}
 	};
+
+
+
+	slider.addEventListener('change', e => {
+		strokeWidth = slider.value;
+	})
+	// Touch Events
+	myCanvas.addEventListener('touchstart', draw.start, false);
+	myCanvas.addEventListener('touchend', draw.end, false);
+	myCanvas.addEventListener('touchmove', draw.move, false);
+
+	// Disable Page Move
+	document.body.addEventListener('touchmove', function (evt) {
+		evt.preventDefault();
+	}, false);
+
 </script>
 
 </html>
