@@ -178,25 +178,27 @@
 
 	function sendRecording() {
 
+		if (confirm("All Recordings after sending will be deleted from your browser, Still Want To Send?")) {
+			console.log('send recording called');
+			console.log(messageArray);
+
+			for (let i = 0; i < messageArray.length; i++) {
+
+				socket.emit('start drawing', messageArray[i][0]);
+
+				for (let j = 1; j < messageArray[i].length - 1; j++) {
+
+					socket.emit('drawing', messageArray[i][j]);
 
 
-
-		console.log('send recording called');
-		console.log(messageArray);
-
-		for (let i = 0; i < messageArray.length; i++) {
-
-			socket.emit('start drawing', messageArray[i][0]);
-
-			for (let j = 1; j < messageArray[i].length - 1; j++) {
-
-				socket.emit('drawing', messageArray[i][j]);
-
+				}
+				socket.emit('stop drawing', messageArray[i][messageArray[i].length - 1]);
 
 			}
-			socket.emit('stop drawing', messageArray[i][messageArray[i].length - 1]);
-
+			messageArray = [];
 		}
+
+
 	}
 
 	var myCanvas = document.getElementById("myCanvas");
