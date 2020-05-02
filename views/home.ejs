@@ -1,0 +1,72 @@
+<html>
+
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title></title>
+  <link rel="stylesheet" href="style.css">
+  <!-- Latest compiled and minified CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+    integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+</head>
+<style>
+  #sub {
+    background-color: #000;
+    height: 40px;
+    width: 180px;
+    margin: 4px;
+    border-color: white;
+    margin-top: 10px;
+    font-size: 1em;
+    border-radius: 55px;
+    color: white;
+    outline: none;
+  }
+
+  .fields {
+    outline: none;
+    height: 40px;
+    width: 150px;
+    margin: 4px;
+    text-align: center;
+    border-color: white;
+    margin-top: 10px;
+    font-size: 1em;
+    border-radius: 55px;
+    color: black;
+  }
+
+  body {
+    background-image: url('https://ya-webdesign.com/transparent450_/social-media-background-png-18.png');
+    background-color: black;
+    color: white;
+    margin-top: 30px;
+  }
+</style>
+
+<body>
+  <h1 style="text-align: center;font-weight: bolder; border: white;">Draw Wid Me !</h1>
+  <div style="text-align: center;margin-top: 3%">
+
+    <input type="text" id="channel" class="fields" width="50px" wrap="hard" style="font-weight: bolder"
+      placeholder="#room_name">
+    <br>
+    <input type="text" id="username" class="fields" width="50px" wrap="hard" style="font-weight: bolder"
+      placeholder="#your_name">
+    <br>
+    <button onclick="connect()" id="sub">Get Me to board!</button>
+
+
+  </div>
+  <br>
+  <br>
+  <h5 style="text-align: center;font-weight: bolder">Invite your friends on Your personal board, Use it for fun,
+    Educational explanation or Share it with your PC/Lappy and draw with your Personal Room </h5>
+  <script>
+
+    function connect() {
+      let channel_name = document.getElementById('channel').value;
+      let username = document.getElementById('username').value;
+      window.location.href = '/' + channel_name + '/' + username;
+    }
+  </script>
