@@ -56,13 +56,30 @@
     <br>
     <button onclick="connect()" id="sub">Get Me to board!</button>
 
+    <br>
+    <br>
+    <button onclick="drawWidHands()" class="badge badge-warning"
+      style="color: black; background-color: orange; border-radius: 0px; border-color: orange;">Try
+      our Experimental
+      Feature Draw Wid Your Hands Here</button>
+
+
 
   </div>
   <br>
   <br>
+  </div>
   <h5 style="text-align: center;font-weight: bolder">Invite your friends on Your personal board, Use it for fun,
     Educational explanation or Share it with your PC/Lappy and draw with your Personal Room </h5>
+
+
+
   <script>
+
+    function drawWidHands() {
+
+      window.location.href = '/ml';
+    }
 
     function connect() {
       let channel_name = document.getElementById('channel').value;
