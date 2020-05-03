@@ -1,4 +1,4 @@
-<h1 align="center">Welcome to Draw WiD mE! 👋</h1>
+<h1 align="center">Draw WiD mE! 👋</h1>
 <p>
   <img alt="Version" src="https://img.shields.io/badge/version-1.0.0-blue.svg?cacheSeconds=2592000" />
   <a href="https://github.com/ihimanshubhutani/drawWidMe#readme" target="_blank">
@@ -13,7 +13,15 @@
   </a>
 </p>
 
-> Invite Your friends on same board and draw, Explain or Use it As you Want
+# A Simple Yet Useful LIVE BOARD _!_ 
+
+> Invite Your friends on same LIVE board and draw, Explain or Use it As you Want
+
+You are free to use this live board the way you want, Collab with your friends :couple: ,Play paper games sitting far away :game_die: , Explain your little work :chart_with_upwards_trend: by joining a room.
+
+# New Feature 
+
+Now you can record your drawing and then send it, your drawing when recording will not be live to other members of the Board and will only become visible to them once you send it 
 
 ### 🏠 [Homepage](http://drawwidme.herokuapp.com)
 
