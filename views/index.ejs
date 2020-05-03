@@ -470,8 +470,8 @@
 			}
 
 			ctx.moveTo(
-				evt.touches[0].pageX,
-				evt.touches[0].pageY
+				evt.touches[0].pageX - myCanvas.offsetLeft,
+				evt.touches[0].pageY - myCanvas.offsetTop
 			);
 
 			this.started = true;
@@ -495,8 +495,8 @@
 				}
 
 				ctx.lineTo(
-					evt.touches[0].pageX,
-					evt.touches[0].pageY
+					evt.touches[0].pageX - myCanvas.offsetLeft,
+					evt.touches[0].pageY - myCanvas.offsetTop
 				);
 
 				ctx.strokeStyle = color;
