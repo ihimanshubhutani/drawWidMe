@@ -23,9 +23,13 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 
 </head>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.7.5/lodash.min.js"></script>
+
 
 <script src="/socket.io/socket.io.js"></script>
 <script>
+
+
 
 	function pause(milliseconds) {
 		var dt = new Date();
@@ -54,9 +58,6 @@
 <body style="overscroll-behavior: none;">
 
 	<div class="bs-example">
-
-
-
 
 		<input type="text" style="display:none; height: 1px; width:1px" id='userinfo' value=<%= username %>>
 		<p id="userroom" style="font-size: 1px; display: none;"><%=userroom%></p>
@@ -140,7 +141,7 @@
 	crossorigin="anonymous"></script>
 
 <script>
-	alert('Use it in Full Screen mode for beter use. [Update- Now you can record your drawing and then Send it]');
+	alert('Use it in Full Screen mode for better use. [Update- Now you can record your drawing and then Send it]');
 
 	var messageArray = [];
 	var recording = false;
@@ -369,6 +370,7 @@
 	var count = 0;
 	var cordinateArray = [];
 	let userarray = [];
+	
 
 	// Mouse Event Handlers
 	if (myCanvas) {
@@ -422,7 +424,6 @@
 					}
 
 
-
 					cordinateArray.push({ canvasX: e.pageX, canvasY: e.pageY, color, strokeWidth });
 
 					ctx.lineWidth = strokeWidth;
@@ -454,11 +455,14 @@
 
 	var counti = 0;
 	// Touch Events Handlers
+
+	let ctxTouch= Object.assign({},ctx);
+
 	draw = {
 		started: false,
 		start: function (evt) {
 
-			ctx.beginPath();
+			ctxTouch.beginPath();
 
 			cordinateArray.push({ canvasX: evt.touches[0].pageX, canvasY: evt.touches[0].pageY, color, strokeWidth });
 
@@ -471,7 +475,7 @@
 				userarray.push({ send: true, room, username, color, strokeWidth });
 			}
 
-			ctx.moveTo(
+			ctxTouch.moveTo(
 				evt.touches[0].pageX - myCanvas.offsetLeft,
 				evt.touches[0].pageY - myCanvas.offsetTop
 			);
@@ -496,14 +500,14 @@
 					} cordinateArray = [];
 				}
 
-				ctx.lineTo(
+				ctxTouch.lineTo(
 					evt.touches[0].pageX - myCanvas.offsetLeft,
 					evt.touches[0].pageY - myCanvas.offsetTop
 				);
 
-				ctx.strokeStyle = color;
-				ctx.lineWidth = strokeWidth;
-				ctx.stroke();
+				ctxTouch.strokeStyle = color;
+				ctxTouch.lineWidth = strokeWidth;
+				ctxTouch.stroke();
 			}
 
 		},
