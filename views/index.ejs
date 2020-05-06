@@ -23,13 +23,13 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 
 </head>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.7.5/lodash.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.5/lodash.min.js"></script>
 
 
 <script src="/socket.io/socket.io.js"></script>
 <script>
 
-
+var _u = _.noConflict(); // lets call ourselves _u
 
 	function pause(milliseconds) {
 		var dt = new Date();
@@ -456,7 +456,7 @@
 	var counti = 0;
 	// Touch Events Handlers
 
-	let ctxTouch= ctx2;
+	let ctxTouch= _u.cloneDeep(ctx2);
 
 	draw = {
 		started: false,
