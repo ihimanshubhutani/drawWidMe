@@ -456,7 +456,8 @@ var _u = _.noConflict(); // lets call ourselves _u
 	var counti = 0;
 	// Touch Events Handlers
 
-	let ctxTouch= _u.cloneDeep(ctx2);
+	var canvas2 = document.getElementById("myCanvas");
+	let ctxTouch= canvas2.getContext("2d"); 
 
 	draw = {
 		started: false,
