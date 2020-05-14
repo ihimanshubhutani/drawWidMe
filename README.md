@@ -53,7 +53,7 @@ npm install
 
 ## 🤝 Contributing
 
-❤️ You are always welcome if you want to Contribue or join this project, raise Issues or to Request for new feature ! Treat This project as Your Own :fire: <br />Feel free to check [issues page](https://github.com/ihimanshubhutani/drawWidMe/issues). You can also take a look at the [contributing guide](https://github.com/ihimanshubhutani/drawWidMe/blob/master/CONTRIBUTING.md).
+❤️ You are always welcome if you want to Contribue or join this project, raise Issues or to Request for new feature ! Contribute and Treat This project as Your Own :fire: <br />Feel free to check [issues page](https://github.com/ihimanshubhutani/drawWidMe/issues). You can also take a look at the [contributing guide](https://github.com/ihimanshubhutani/drawWidMe/blob/master/CONTRIBUTING.md).
 
 ## Show your support
 
@@ -63,7 +63,7 @@ Give a ⭐️ if this project helped you!
 
 Copyright © 2020 [Himanshu Bhutani](https://github.com/ihimanshubhutani).<br />
 
-This Project is under [GNU GPLv3.0](https://github.com/ihimanshubhutani/drawWidMe/blob/master/LICENSE) License. 
+This Project dont't have any license, _[What if project have No License ?](https://choosealicense.com/no-permission/)_
 
 ***
 _Made with ❤️ by [Himanshu Bhutani](https://github.com/ihimanshubhutani)_
