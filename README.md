@@ -59,5 +59,7 @@ Give a ⭐️ if this project helped you!
 
 Copyright © 2020 [Himanshu Bhutani](https://github.com/ihimanshubhutani).<br />
 
+This Project is under [GNU v3.0](https://github.com/ihimanshubhutani/drawWidMe/blob/master/LICENSE) License. 
+
 ***
 _Made with ❤️ by [Himanshu Bhutani](https://github.com/ihimanshubhutani)_
