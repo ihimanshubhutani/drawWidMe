@@ -23,6 +23,10 @@ You are free to use this live board the way you want, Collab with your friends :
 
 Now you can record your drawing and then send it, your drawing when recording will not be live to other members of the Board and will only become visible to them once you send it 
 
+# Experimental Feature 
+
+Try our experimental feature Draw wid Hands, - Machine Learning Feature which moves marker according to Your Hands.
+
 ### 🏠 [Homepage](http://drawwidme.herokuapp.com)
 
 ### ✨ [Demo](http://drawwidme.herokuapp.com/demo/user)
@@ -59,7 +63,7 @@ Give a ⭐️ if this project helped you!
 
 Copyright © 2020 [Himanshu Bhutani](https://github.com/ihimanshubhutani).<br />
 
-This Project is under [GNU v3.0](https://github.com/ihimanshubhutani/drawWidMe/blob/master/LICENSE) License. 
+This Project is under [GNU GPLv3.0](https://github.com/ihimanshubhutani/drawWidMe/blob/master/LICENSE) License. 
 
 ***
 _Made with ❤️ by [Himanshu Bhutani](https://github.com/ihimanshubhutani)_
