@@ -63,7 +63,5 @@ Give a ⭐️ if this project helped you!
 
 Copyright © 2020 [Himanshu Bhutani](https://github.com/ihimanshubhutani).<br />
 
-This Project dont't have any license, _[What if project have No License ?](https://choosealicense.com/no-permission/)_
-
 ***
 _Made with ❤️ by [Himanshu Bhutani](https://github.com/ihimanshubhutani)_
