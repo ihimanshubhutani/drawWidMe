@@ -23,6 +23,8 @@ You are free to use this live board the way you want, Collab with your friends :
 
 Now you can record your drawing and then send it, your drawing when recording will not be live to other members of the Board and will only become visible to them once you send it 
 
+⭐️ ⭐️ ⭐️ ⭐️ ⭐️ ⭐️ ⭐️ ⭐️ ⭐️ ⭐️  Please don't forget to give us this ⭐️ ⭐️ ⭐️ ⭐️ ⭐️ ⭐️ ⭐️ ⭐️ ⭐️ ⭐️ ⭐️ 
+
 # Experimental Feature 
 
 Try our experimental feature Draw wid Hands, - Machine Learning Feature which moves marker according to Your Hands.
