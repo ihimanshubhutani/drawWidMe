@@ -20,6 +20,6 @@
     "ejs": "^3.1.2",
     "express": "^4.17.1",
     "rangeslider.js": "^2.3.3",
-    "socket.io": "^2.3.0"
+    "socket.io": "^2.5.0"
   }
 }
